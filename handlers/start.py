@@ -9,11 +9,7 @@ from aiogram.types import (
 
 from services.membership import check_member
 
-from keyboards.menu import member_menu
-
 from keyboards.reply import main_keyboard
-
-from keyboards.buttons import renew_button
 
 import os
 
@@ -48,6 +44,8 @@ async def start(
 
 
 
+
+
     # ==========================
     # USER BARU
     # BELUM ADA DI SHEET
@@ -72,7 +70,6 @@ async def start(
                 photo=FSInputFile(
                     welcome_image
                 ),
-
 
                 caption=f"""
 
@@ -103,6 +100,7 @@ Smart Money Concept."
 
 
 
+
         lot_image = "assets/lot_size.jpg"
 
 
@@ -117,7 +115,6 @@ Smart Money Concept."
                 photo=FSInputFile(
                     lot_image
                 ),
-
 
                 caption="""
 
@@ -143,6 +140,8 @@ profit will follow."
                 parse_mode="HTML"
 
             )
+
+
 
 
 
@@ -178,6 +177,7 @@ Saya akan memberikan:
 
 ⏰ Jadwal Signal:
 
+
 Setiap 1 jam sekali
 
 Menit 00
@@ -200,7 +200,7 @@ Gunakan:
 
 """,
 
-            reply_markup=main_keyboard(),(),
+            reply_markup=main_keyboard(),
 
             parse_mode="HTML"
 
