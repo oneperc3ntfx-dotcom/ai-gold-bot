@@ -4,13 +4,23 @@ from aiogram.types import (
 )
 
 
+from config.settings import (
+    RENEW_BOT
+)
 
+
+
+
+
+# ==========================
+# RENEW BUTTON
+# ==========================
 
 
 def renew_button():
 
 
-    return InlineKeyboardMarkup(
+    keyboard = InlineKeyboardMarkup(
 
         inline_keyboard=[
 
@@ -20,7 +30,7 @@ def renew_button():
 
                     text="🔄 PERPANJANG MEMBERSHIP",
 
-                    url="https://t.me/Intradayxauusd_bot"
+                    url=RENEW_BOT
 
                 )
 
@@ -29,3 +39,6 @@ def renew_button():
         ]
 
     )
+
+
+    return keyboard
