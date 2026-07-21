@@ -1,0 +1,61 @@
+import os
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
+
+BOT_TOKEN = os.getenv(
+    "BOT_TOKEN"
+)
+
+
+
+SOURCE_GROUP_ID = int(
+    os.getenv(
+        "SOURCE_GROUP_ID"
+    )
+)
+
+
+
+SIGNAL_TOPIC_ID = int(
+    os.getenv(
+        "SIGNAL_TOPIC_ID"
+    )
+)
+
+
+
+PAYMENT_GROUP_ID = int(
+    os.getenv(
+        "PAYMENT_GROUP_ID"
+    )
+)
+
+
+
+SPREADSHEET_ID = os.getenv(
+    "SPREADSHEET_ID"
+)
+
+
+
+ADMIN_USERNAME = os.getenv(
+    "ADMIN_USERNAME"
+)
+
+
+
+RENEW_BOT = os.getenv(
+    "RENEW_BOT"
+)
+
+
+
+TIMEZONE = os.getenv(
+    "SIGNAL_TIMEZONE",
+    "Asia/Jakarta"
+)
