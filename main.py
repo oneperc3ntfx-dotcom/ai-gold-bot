@@ -45,11 +45,6 @@ dp.include_router(
 
 
 dp.include_router(
-    membership_router
-)
-
-
-dp.include_router(
     signal_router
 )
 
