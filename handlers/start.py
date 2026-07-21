@@ -7,15 +7,11 @@ from aiogram.types import (
     FSInputFile
 )
 
-
 from services.membership import check_member
-
 
 from keyboards.menu import member_menu
 
-
 from keyboards.buttons import renew_button
-
 
 import os
 
@@ -50,73 +46,157 @@ async def start(
 
 
 
-
-
     # ==========================
-    # EXPIRED MEMBER
+    # USER BARU
+    # BELUM ADA DI SHEET
     # ==========================
 
 
-    if not member["active"]:
+    if not member["found"]:
 
 
-        text = f"""
 
-🔒 <b>MEMBERSHIP SUDAH BERAKHIR</b>
+        welcome_image = "assets/welcome.jpg"
+
+
+
+        if os.path.exists(
+            welcome_image
+        ):
+
+
+            await message.answer_photo(
+
+                photo=FSInputFile(
+                    welcome_image
+                ),
+
+
+                caption=f"""
+
+🤖 <b>XAU AI ASSISTANT</b>
 
 
 Halo <b>{message.from_user.first_name}</b> 👋
 
 
+Selamat datang di
+AI Trading Assistant Anda.
+
+
 <blockquote>
-"Masa aktif membership Anda
-telah selesai."
+"Saya akan membantu memberikan
+Signal XAUUSD dengan metode
+Smart Money Concept."
 </blockquote>
 
 
-━━━━━━━━━━━━━━
+""",
+
+                parse_mode="HTML"
+
+            )
 
 
-Saat ini akses Anda telah berhenti:
 
 
-📊 XAUUSD Premium Signal
 
-🧠 Smart Money Concept Analysis
-
-⚡ Gold Market Update
+        lot_image = "assets/lot_size.jpg"
 
 
-━━━━━━━━━━━━━━
+
+        if os.path.exists(
+            lot_image
+        ):
 
 
-Anda masih dapat melanjutkan
-akses premium dengan melakukan
-perpanjangan membership.
+            await message.answer_photo(
+
+                photo=FSInputFile(
+                    lot_image
+                ),
 
 
-Silakan hubungi:
+                caption="""
+
+📚 <b>MONEY MANAGEMENT GUIDE</b>
 
 
-🤖 <b>@Intradayxauusd_bot</b>
+Sebelum mengikuti signal,
+gunakan lot sesuai modal
+dan risiko Anda.
 
 
-━━━━━━━━━━━━━━
+<blockquote>
+"Protect your capital first,
+profit will follow."
+</blockquote>
 
 
-Terima kasih telah menjadi bagian
-dari:
+⚠️ Hindari over lot.
 
 
-<b>🤖 XAU AI ASSISTANT</b>
+""",
+
+                parse_mode="HTML"
+
+            )
 
 
-"""
+
 
 
         await message.answer(
 
-            text,
+f"""
+
+🤖 <b>XAU AI ASSISTANT PREMIUM</b>
+
+
+Halo <b>{message.from_user.first_name}</b> 👋
+
+
+Saya adalah AI Assistant pribadi Anda.
+
+
+Saya akan memberikan:
+
+
+📊 Signal XAUUSD
+
+🧠 Smart Money Concept Analysis
+
+📈 Market Structure
+
+💎 Liquidity Analysis
+
+
+━━━━━━━━━━━━━━
+
+
+⏰ Jadwal Signal:
+
+Setiap 1 jam sekali
+
+Menit 00
+
+
+━━━━━━━━━━━━━━
+
+
+Untuk mengaktifkan akses premium,
+silahkan lakukan membership.
+
+
+Gunakan:
+
+<b>/menu</b>
+
+
+🤖 XAU AI ASSISTANT
+
+
+""",
 
             reply_markup=renew_button(),
 
@@ -134,111 +214,71 @@ dari:
 
 
     # ==========================
-    # ACTIVE MEMBER
+    # USER SUDAH ADA
+    # TAPI EXPIRED
     # ==========================
 
 
-
-    # ==========================
-    # IMAGE WELCOME
-    # ==========================
+    if not member["active"]:
 
 
-    welcome_image = (
-        "assets/welcome.jpg"
-    )
 
+        await message.answer(
 
-    if os.path.exists(
-        welcome_image
-    ):
+f"""
 
-
-        await message.answer_photo(
-
-            photo=FSInputFile(
-                welcome_image
-            ),
-
-
-            caption=f"""
-
-🤖 <b>XAU AI ASSISTANT PREMIUM</b>
+🔒 <b>MEMBERSHIP SUDAH HABIS</b>
 
 
 Halo <b>{message.from_user.first_name}</b> 👋
 
 
-Selamat datang di AI Trading
-Assistant pribadi Anda.
+Masa aktif membership Anda
+telah selesai.
 
 
-<blockquote>
-"Sistem analisa Smart Money Concept
-untuk membantu membaca pergerakan
-XAUUSD secara lebih terstruktur."
-</blockquote>
+━━━━━━━━━━━━━━
+
+
+Akses premium dihentikan:
+
+
+📊 XAUUSD Signal
+
+🧠 Smart Money Concept
+
+⚡ Gold Market Update
+
+
+━━━━━━━━━━━━━━
+
+
+Silahkan perpanjang membership
+untuk mengaktifkan kembali.
+
+
+Hubungi:
+
+
+🤖 <b>@Intradayxauusd_bot</b>
+
+
+━━━━━━━━━━━━━━
+
+
+<b>XAU AI ASSISTANT</b>
 
 
 """,
+
+            reply_markup=renew_button(),
 
             parse_mode="HTML"
 
         )
 
 
-
-
-
-
-
-    # ==========================
-    # IMAGE LOT SIZE
-    # ==========================
-
-
-    lot_image = (
-        "assets/lot_size.jpg"
-    )
-
-
-    if os.path.exists(
-        lot_image
-    ):
-
-
-        await message.answer_photo(
-
-            photo=FSInputFile(
-                lot_image
-            ),
-
-
-            caption="""
-
-📚 <b>MONEY MANAGEMENT GUIDE</b>
-
-
-Sebelum mengikuti signal,
-selalu gunakan lot sesuai modal
-dan batas risiko Anda.
-
-
-<blockquote>
-"Protect your capital first,
-profit will follow."
-</blockquote>
-
-
-⚠️ Hindari over lot dan tetap
-ikuti aturan money management.
-
-
-""",
-
-            parse_mode="HTML"
-
-        )
+        return
 
 
 
@@ -247,11 +287,14 @@ ikuti aturan money management.
 
 
     # ==========================
-    # MAIN WELCOME MESSAGE
+    # MEMBER MASIH AKTIF
     # ==========================
 
 
-    text = f"""
+
+    await message.answer(
+
+f"""
 
 🤖 <b>XAU AI ASSISTANT</b>
 
@@ -259,67 +302,34 @@ ikuti aturan money management.
 Halo <b>{message.from_user.first_name}</b> 👋
 
 
-<blockquote>
-"Saya adalah AI Assistant pribadi Anda.
+Saya adalah Assistant pribadi Anda.
 
-Saya akan memberikan Signal XAUUSD
-setiap 1 jam sekali pada menit 00
-dengan analisa Smart Money Concept."
-</blockquote>
+
+🟢 <b>Membership masih aktif</b>
 
 
 ━━━━━━━━━━━━━━
 
 
-📊 <b>SYSTEM SIGNAL</b>
+📦 Paket:
+
+<b>{member['package']}</b>
 
 
-⏰ Update:
-Setiap 1 jam sekali
+📅 Aktif sampai:
 
-
-🕒 Eksekusi:
-Menit 00
-
-
-📈 Metode Analisa:
-
-• Smart Money Concept
-
-• Liquidity Analysis
-
-• Market Structure
+<b>{member['expired']}</b>
 
 
 ━━━━━━━━━━━━━━
 
 
-⚠️ <b>TRADING RULE</b>
+Signal XAUUSD akan dikirim
+otomatis setiap 1 jam sekali
+pada menit 00.
 
 
-Gunakan manajemen risiko yang baik.
-
-
-Ikuti signal dengan disiplin agar
-hasil trading lebih terkontrol.
-
-
-━━━━━━━━━━━━━━
-
-
-📈 <b>TEAM PORTFOLIO</b>
-
-
-Lihat perkembangan portofolio team:
-
-
-https://docs.google.com/spreadsheets/d/1p1jiuCcU6tUxxPEmodkwaQBmCB8u-BLOGa5J7LpETKE/edit
-
-
-━━━━━━━━━━━━━━
-
-
-Gunakan perintah:
+Gunakan:
 
 
 <b>/menu</b>
@@ -331,12 +341,7 @@ untuk melihat layanan Anda.
 🤖 <b>XAU AI ASSISTANT</b>
 
 
-"""
-
-
-    await message.answer(
-
-        text,
+""",
 
         reply_markup=member_menu(),
 
