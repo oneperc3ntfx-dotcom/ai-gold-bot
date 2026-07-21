@@ -32,7 +32,7 @@ router = Router()
 
 
 # ==========================
-# START
+# START COMMAND
 # ==========================
 
 
@@ -48,7 +48,6 @@ async def start(
     user_id = message.from_user.id
 
 
-
     member = check_member(
         user_id
     )
@@ -57,9 +56,9 @@ async def start(
 
 
 
-    # =====================
-    # EXPIRED
-    # =====================
+    # ==========================
+    # EXPIRED MEMBER
+    # ==========================
 
 
     if not member["active"]:
@@ -67,7 +66,7 @@ async def start(
 
         text = f"""
 
-🔒 <b>MEMBERSHIP BERAKHIR</b>
+🔒 <b>MEMBERSHIP EXPIRED</b>
 
 
 Halo <b>{message.from_user.first_name}</b> 👋
@@ -75,25 +74,29 @@ Halo <b>{message.from_user.first_name}</b> 👋
 
 <blockquote>
 "Masa aktif membership Anda
-telah selesai."
+telah berakhir."
 </blockquote>
 
 
 ━━━━━━━━━━━━━━
 
 
-Anda sudah tidak menerima:
+Saat ini Anda tidak mendapatkan:
 
 
-📊 Signal XAUUSD Premium
+📊 XAUUSD Premium Signal
 
 🧠 Smart Money Concept Analysis
 
-⚡ Market Update
+⚡ Market Update Gold
 
 
-Silakan perpanjang membership
-untuk mendapatkan akses kembali.
+━━━━━━━━━━━━━━
+
+
+Silakan lakukan perpanjangan
+membership untuk mendapatkan
+akses kembali.
 
 
 🤖 <b>XAU AI ASSISTANT</b>
@@ -120,19 +123,111 @@ untuk mendapatkan akses kembali.
 
 
 
-    # =====================
-    # ACTIVE
-    # =====================
+
+    # ==========================
+    # ACTIVE MEMBER
+    # ==========================
 
 
 
-    photo = FSInputFile(
 
-        "assets/lot_size.jpg"
+
+    # ==========================
+    # IMAGE 1
+    # WELCOME
+    # ==========================
+
+
+    await message.answer_photo(
+
+        photo=FSInputFile(
+
+            "assets/welcome.jpg"
+
+        ),
+
+
+        caption=f"""
+
+🤖 <b>XAU AI ASSISTANT PREMIUM</b>
+
+
+Halo <b>{message.from_user.first_name}</b> 👋
+
+
+Selamat datang di sistem
+AI Trading Assistant Anda.
+
+
+<blockquote>
+"Smart Money Concept Analysis
+untuk membantu membaca
+pergerakan XAUUSD lebih terstruktur."
+</blockquote>
+
+
+""",
+
+        parse_mode="HTML"
 
     )
 
 
+
+
+
+
+
+    # ==========================
+    # IMAGE 2
+    # LOT SIZE
+    # ==========================
+
+
+    await message.answer_photo(
+
+        photo=FSInputFile(
+
+            "assets/lot_size.jpg"
+
+        ),
+
+
+        caption="""
+
+📚 <b>MONEY MANAGEMENT GUIDE</b>
+
+
+Sebelum mengikuti signal,
+pastikan penggunaan lot sesuai
+dengan modal dan risk management.
+
+
+<blockquote>
+"Protect your capital first,
+profit will follow."
+</blockquote>
+
+
+⚠️ Jangan menggunakan lot besar
+tanpa perhitungan risiko.
+
+
+""",
+
+        parse_mode="HTML"
+
+    )
+
+
+
+
+
+
+
+    # ==========================
+    # WELCOME TEXT
+    # ==========================
 
 
     text = f"""
@@ -147,8 +242,8 @@ Halo <b>{message.from_user.first_name}</b> 👋
 "Saya adalah AI Assistant pribadi Anda.
 
 Saya akan memberikan Signal XAUUSD
-setiap 1 jam sekali dengan analisa
-Smart Money Concept."
+setiap 1 jam sekali pada menit 00
+dengan analisa Smart Money Concept."
 </blockquote>
 
 
@@ -158,34 +253,44 @@ Smart Money Concept."
 📊 <b>SYSTEM SIGNAL</b>
 
 
-⏰ Update setiap jam
+⏰ Update:
+Setiap 1 jam sekali
 
-🕒 Entry menit 00
 
-📈 Smart Money Concept
+🕒 Waktu:
+Menit 00
 
-💎 Liquidity Analysis
+
+📈 Analisa:
+
+• Smart Money Concept
+
+• Liquidity Analysis
+
+• Market Structure
 
 
 ━━━━━━━━━━━━━━
 
 
-⚠️ <b>RULE TRADING</b>
+⚠️ <b>TRADING RULE</b>
 
 
 Gunakan money management yang baik.
 
-Ikuti aturan trading agar hasil
-portofolio dapat maksimal.
+
+Ikuti signal dengan disiplin agar
+hasil portofolio dapat maksimal.
 
 
 ━━━━━━━━━━━━━━
 
 
-📈 <b>PORTOFOLIO TEAM</b>
+📈 <b>TEAM PORTFOLIO</b>
 
 
-Lihat perkembangan team:
+Anda dapat melihat perkembangan
+portofolio team kami:
 
 
 https://docs.google.com/spreadsheets/d/1p1jiuCcU6tUxxPEmodkwaQBmCB8u-BLOGa5J7LpETKE/edit
@@ -196,21 +301,22 @@ https://docs.google.com/spreadsheets/d/1p1jiuCcU6tUxxPEmodkwaQBmCB8u-BLOGa5J7LpE
 
 Ketik:
 
-
-/menu
+<b>/menu</b>
 
 
 untuk melihat layanan Anda.
 
 
+🤖 <b>XAU AI ASSISTANT</b>
+
+
 """
 
 
-    await message.answer_photo(
 
-        photo=photo,
+    await message.answer(
 
-        caption=text,
+        text,
 
         reply_markup=member_menu(),
 
