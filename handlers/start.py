@@ -200,7 +200,7 @@ Gunakan:
 
 """,
 
-            reply_markup=renew_button(),
+            reply_markup=main_keyboard(),(),
 
             parse_mode="HTML"
 
