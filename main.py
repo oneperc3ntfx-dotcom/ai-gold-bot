@@ -10,7 +10,6 @@ from config.settings import BOT_TOKEN
 
 from handlers.start import router as start_router
 from handlers.menu import router as menu_router
-from handlers.membership import router as membership_router
 from handlers.signal import router as signal_router
 from handlers.admin import router as admin_router
 
