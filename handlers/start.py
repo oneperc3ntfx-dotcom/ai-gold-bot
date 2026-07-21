@@ -8,20 +8,16 @@ from aiogram.types import (
 )
 
 
-from services.membership import (
-    check_member
-)
+from services.membership import check_member
 
 
-from keyboards.menu import (
-    member_menu
-)
+from keyboards.menu import member_menu
 
 
-from keyboards.buttons import (
-    renew_button
-)
+from keyboards.buttons import renew_button
 
+
+import os
 
 
 
@@ -66,7 +62,7 @@ async def start(
 
         text = f"""
 
-🔒 <b>MEMBERSHIP EXPIRED</b>
+🔒 <b>MEMBERSHIP SUDAH BERAKHIR</b>
 
 
 Halo <b>{message.from_user.first_name}</b> 👋
@@ -74,32 +70,45 @@ Halo <b>{message.from_user.first_name}</b> 👋
 
 <blockquote>
 "Masa aktif membership Anda
-telah berakhir."
+telah selesai."
 </blockquote>
 
 
 ━━━━━━━━━━━━━━
 
 
-Saat ini Anda tidak mendapatkan:
+Saat ini akses Anda telah berhenti:
 
 
 📊 XAUUSD Premium Signal
 
 🧠 Smart Money Concept Analysis
 
-⚡ Market Update Gold
+⚡ Gold Market Update
 
 
 ━━━━━━━━━━━━━━
 
 
-Silakan lakukan perpanjangan
-membership untuk mendapatkan
-akses kembali.
+Anda masih dapat melanjutkan
+akses premium dengan melakukan
+perpanjangan membership.
 
 
-🤖 <b>XAU AI ASSISTANT</b>
+Silakan hubungi:
+
+
+🤖 <b>@Intradayxauusd_bot</b>
+
+
+━━━━━━━━━━━━━━
+
+
+Terima kasih telah menjadi bagian
+dari:
+
+
+<b>🤖 XAU AI ASSISTANT</b>
 
 
 """
@@ -130,24 +139,29 @@ akses kembali.
 
 
 
-
-
     # ==========================
-    # IMAGE 1
-    # WELCOME
+    # IMAGE WELCOME
     # ==========================
 
 
-    await message.answer_photo(
-
-        photo=FSInputFile(
-
-            "assets/welcome.jpg"
-
-        ),
+    welcome_image = (
+        "assets/welcome.jpg"
+    )
 
 
-        caption=f"""
+    if os.path.exists(
+        welcome_image
+    ):
+
+
+        await message.answer_photo(
+
+            photo=FSInputFile(
+                welcome_image
+            ),
+
+
+            caption=f"""
 
 🤖 <b>XAU AI ASSISTANT PREMIUM</b>
 
@@ -155,52 +169,59 @@ akses kembali.
 Halo <b>{message.from_user.first_name}</b> 👋
 
 
-Selamat datang di sistem
-AI Trading Assistant Anda.
+Selamat datang di AI Trading
+Assistant pribadi Anda.
 
 
 <blockquote>
-"Smart Money Concept Analysis
-untuk membantu membaca
-pergerakan XAUUSD lebih terstruktur."
+"Sistem analisa Smart Money Concept
+untuk membantu membaca pergerakan
+XAUUSD secara lebih terstruktur."
 </blockquote>
 
 
 """,
 
-        parse_mode="HTML"
+            parse_mode="HTML"
 
+        )
+
+
+
+
+
+
+
+    # ==========================
+    # IMAGE LOT SIZE
+    # ==========================
+
+
+    lot_image = (
+        "assets/lot_size.jpg"
     )
 
 
+    if os.path.exists(
+        lot_image
+    ):
 
 
+        await message.answer_photo(
+
+            photo=FSInputFile(
+                lot_image
+            ),
 
 
-
-    # ==========================
-    # IMAGE 2
-    # LOT SIZE
-    # ==========================
-
-
-    await message.answer_photo(
-
-        photo=FSInputFile(
-
-            "assets/lot_size.jpg"
-
-        ),
-
-
-        caption="""
+            caption="""
 
 📚 <b>MONEY MANAGEMENT GUIDE</b>
 
 
 Sebelum mengikuti signal,
-pastikan penggunaan lot sesuai
-dengan modal dan risk management.
+selalu gunakan lot sesuai modal
+dan batas risiko Anda.
 
 
 <blockquote>
@@ -209,15 +230,15 @@ profit will follow."
 </blockquote>
 
 
-⚠️ Jangan menggunakan lot besar
-tanpa perhitungan risiko.
+⚠️ Hindari over lot dan tetap
+ikuti aturan money management.
 
 
 """,
 
-        parse_mode="HTML"
+            parse_mode="HTML"
 
-    )
+        )
 
 
 
@@ -226,7 +247,7 @@ tanpa perhitungan risiko.
 
 
     # ==========================
-    # WELCOME TEXT
+    # MAIN WELCOME MESSAGE
     # ==========================
 
 
@@ -257,11 +278,11 @@ dengan analisa Smart Money Concept."
 Setiap 1 jam sekali
 
 
-🕒 Waktu:
+🕒 Eksekusi:
 Menit 00
 
 
-📈 Analisa:
+📈 Metode Analisa:
 
 • Smart Money Concept
 
@@ -276,11 +297,11 @@ Menit 00
 ⚠️ <b>TRADING RULE</b>
 
 
-Gunakan money management yang baik.
+Gunakan manajemen risiko yang baik.
 
 
 Ikuti signal dengan disiplin agar
-hasil portofolio dapat maksimal.
+hasil trading lebih terkontrol.
 
 
 ━━━━━━━━━━━━━━
@@ -289,8 +310,7 @@ hasil portofolio dapat maksimal.
 📈 <b>TEAM PORTFOLIO</b>
 
 
-Anda dapat melihat perkembangan
-portofolio team kami:
+Lihat perkembangan portofolio team:
 
 
 https://docs.google.com/spreadsheets/d/1p1jiuCcU6tUxxPEmodkwaQBmCB8u-BLOGa5J7LpETKE/edit
@@ -299,7 +319,8 @@ https://docs.google.com/spreadsheets/d/1p1jiuCcU6tUxxPEmodkwaQBmCB8u-BLOGa5J7LpE
 ━━━━━━━━━━━━━━
 
 
-Ketik:
+Gunakan perintah:
+
 
 <b>/menu</b>
 
@@ -311,7 +332,6 @@ untuk melihat layanan Anda.
 
 
 """
-
 
 
     await message.answer(
