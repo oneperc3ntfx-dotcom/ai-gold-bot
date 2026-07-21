@@ -34,13 +34,27 @@ def check_member(
     for member in members:
 
 
-        if str(member["Telegram ID"]) == str(telegram_id):
+        sheet_id = str(
+            member.get(
+                "telegram_id",
+                ""
+            )
+        )
+
+
+
+        if sheet_id == str(telegram_id):
 
 
             user_rows.append(
                 member
             )
 
+
+
+
+
+    # user tidak ditemukan
 
 
     if not user_rows:
@@ -63,36 +77,80 @@ def check_member(
 
 
 
-    # Ambil expired terbaru
-
-
-    latest = max(
-
-        user_rows,
-
-
-        key=lambda x:
-
-
-        datetime.strptime(
-
-            x["Expired"],
-
-            DATE_FORMAT
-
-        )
-
-    )
+    valid_rows = []
 
 
 
+    for row in user_rows:
 
 
-    expired_date = datetime.strptime(
+        try:
 
-        latest["Expired"],
 
-        DATE_FORMAT
+            expired = datetime.strptime(
+
+                row.get(
+                    "expired",
+                    ""
+                ),
+
+                DATE_FORMAT
+
+            )
+
+
+            valid_rows.append(
+
+                (
+                    expired,
+
+                    row
+
+                )
+
+            )
+
+
+        except:
+
+
+            continue
+
+
+
+
+
+    # jika expired kosong semua
+
+
+    if not valid_rows:
+
+
+        return {
+
+
+            "active": False,
+
+
+            "expired": None,
+
+
+            "package": None
+
+        }
+
+
+
+
+
+    # ambil membership dengan expired paling lama
+
+
+    latest_date, latest = max(
+
+        valid_rows,
+
+        key=lambda x:x[0]
 
     )
 
@@ -106,7 +164,20 @@ def check_member(
 
 
 
-    if expired_date >= now:
+    status = str(
+
+        latest.get(
+            "status",
+            ""
+        )
+
+    ).upper()
+
+
+
+
+
+    if latest_date >= now and status == "ACTIVE":
 
 
         return {
@@ -115,20 +186,23 @@ def check_member(
             "active": True,
 
 
-            "expired":
-
-                latest["Expired"],
-
-
-            "package":
-
-                latest["Paket"],
+            "expired": latest.get(
+                "expired"
+            ),
 
 
-            "username":
+            "package": latest.get(
+                "paket"
+            ),
 
-                latest["Username"]
 
+            "username": latest.get(
+                "username",
+                ""
+            ),
+
+
+            "data": latest
 
         }
 
@@ -142,16 +216,21 @@ def check_member(
         "active": False,
 
 
-        "expired":
+        "expired": latest.get(
+            "expired"
+        ),
 
-            latest["Expired"],
+
+        "package": latest.get(
+            "paket"
+        ),
 
 
-        "package":
-
-            latest["Paket"]
+        "data": latest
 
     }
+
+
 
 
 
@@ -170,85 +249,138 @@ def get_active_members():
     members = get_members()
 
 
-    result = []
-
-
 
     checked = {}
+
+
 
 
 
     for member in members:
 
 
+
         telegram_id = str(
-            member["Telegram ID"]
-        )
 
-
-
-        expired = datetime.strptime(
-
-            member["Expired"],
-
-            DATE_FORMAT
+            member.get(
+                "telegram_id",
+                ""
+            )
 
         )
 
 
 
-        # simpan expired terbesar
+        if not telegram_id:
 
-        if telegram_id not in checked:
-
-
-            checked[telegram_id] = member
+            continue
 
 
 
-        else:
 
 
-            old = datetime.strptime(
+        try:
 
-                checked[telegram_id]["Expired"],
+
+            expired = datetime.strptime(
+
+                member.get(
+                    "expired"
+                ),
 
                 DATE_FORMAT
 
             )
 
 
-            if expired > old:
+        except:
 
 
-                checked[telegram_id] = member
-
-
-
+            continue
 
 
 
-    for user in checked.values():
 
 
-        expired = datetime.strptime(
-
-            user["Expired"],
-
-            DATE_FORMAT
-
-        )
+        # jika user belum ada
+        # simpan
 
 
+        if telegram_id not in checked:
 
-        if expired >= datetime.now():
+
+            checked[telegram_id] = (
+
+                expired,
+
+                member
+
+            )
+
+
+
+        else:
+
+
+
+            old_expired = checked[telegram_id][0]
+
+
+
+            # ambil expired terbaru
+
+
+            if expired > old_expired:
+
+
+                checked[telegram_id] = (
+
+                    expired,
+
+                    member
+
+                )
+
+
+
+
+
+
+
+
+    result = []
+
+
+
+    now = datetime.now()
+
+
+
+    for expired, member in checked.values():
+
+
+
+        status = str(
+
+            member.get(
+                "status",
+                ""
+            )
+
+        ).upper()
+
+
+
+        if expired >= now and status == "ACTIVE":
 
 
             result.append(
 
-                user
+                member
 
             )
+
+
 
 
 
