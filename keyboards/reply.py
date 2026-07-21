@@ -14,11 +14,11 @@ def main_keyboard():
             [
 
                 KeyboardButton(
-                    text="/START"
+                    text="/start"
                 ),
 
                 KeyboardButton(
-                    text="/MENU"
+                    text="/menu"
                 )
 
             ]
