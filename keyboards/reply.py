@@ -1,4 +1,8 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import (
+    ReplyKeyboardMarkup,
+    KeyboardButton
+)
+
 
 
 def main_keyboard():
@@ -10,11 +14,11 @@ def main_keyboard():
             [
 
                 KeyboardButton(
-                    text="🚀 Start"
+                    text="🚀 START"
                 ),
 
                 KeyboardButton(
-                    text="📋 Menu"
+                    text="📋 MENU"
                 )
 
             ]
