@@ -6,19 +6,14 @@ from aiogram.types import (
 )
 
 
-from services.membership import (
-    check_member
-)
+from services.membership import check_member
 
 
-from keyboards.menu import (
-    member_menu
-)
+from keyboards.menu import member_menu
 
 
-from keyboards.buttons import (
-    renew_button
-)
+from keyboards.buttons import renew_button
+
 
 
 
@@ -45,39 +40,69 @@ async def menu(
     user_id = message.from_user.id
 
 
-
     member = check_member(
         user_id
     )
 
 
 
+
+
+    # ==========================
+    # EXPIRED
+    # ==========================
+
+
     if not member["active"]:
+
+
+        text = f"""
+
+🔒 <b>MEMBERSHIP SUDAH BERAKHIR</b>
+
+
+Halo <b>{message.from_user.first_name}</b> 👋
+
+
+<blockquote>
+"Masa aktif membership Anda
+telah selesai."
+</blockquote>
+
+
+━━━━━━━━━━━━━━
+
+
+Saat ini Anda tidak mendapatkan:
+
+
+📊 XAUUSD Premium Signal
+
+🧠 Smart Money Concept Analysis
+
+⚡ Gold Market Update
+
+
+━━━━━━━━━━━━━━
+
+
+Silakan lakukan perpanjangan
+membership untuk mengaktifkan
+kembali akses Anda.
+
+
+Hubungi:
+
+
+🤖 <b>@Intradayxauusd_bot</b>
+
+
+"""
 
 
         await message.answer(
 
-            """
-
-🔒 <b>MEMBERSHIP TIDAK AKTIF</b>
-
-
-Saat ini membership Anda
-sudah berakhir.
-
-
-Silakan lakukan perpanjangan
-untuk mendapatkan kembali:
-
-
-📊 Signal XAUUSD
-
-🧠 Smart Money Concept
-
-⚡ Market Update
-
-
-""",
+            text,
 
             reply_markup=renew_button(),
 
@@ -93,6 +118,12 @@ untuk mendapatkan kembali:
 
 
 
+
+    # ==========================
+    # ACTIVE
+    # ==========================
+
+
     text = f"""
 
 ⚙️ <b>MEMBER MENU</b>
@@ -101,32 +132,40 @@ untuk mendapatkan kembali:
 Halo <b>{message.from_user.first_name}</b> 👋
 
 
-Status Membership:
-
-🟢 <b>ACTIVE</b>
-
-
-━━━━━━━━━━━━━━
-
-
-📦 Paket:
-
-<b>{member['package']}</b>
-
-
-⏳ Aktif Sampai:
-
-<b>{member['expired']}</b>
+<blockquote>
+"Selamat datang kembali.
+Akses premium Anda masih aktif."
+</blockquote>
 
 
 ━━━━━━━━━━━━━━
 
 
-Silakan pilih menu:
+🟢 <b>Status:</b>
+
+ACTIVE
+
+
+📦 <b>Paket:</b>
+
+{member['package']}
+
+
+📅 <b>Expired:</b>
+
+{member['expired']}
+
+
+━━━━━━━━━━━━━━
+
+
+Silakan pilih layanan Anda.
+
+
+🤖 <b>XAU AI ASSISTANT</b>
 
 
 """
-
 
 
     await message.answer(
@@ -138,6 +177,7 @@ Silakan pilih menu:
         parse_mode="HTML"
 
     )
+
 
 
 
@@ -167,10 +207,10 @@ async def check_expired(
     user_id = callback.from_user.id
 
 
-
     member = check_member(
         user_id
     )
+
 
 
 
@@ -182,17 +222,17 @@ async def check_expired(
 ⏳ <b>MEMBERSHIP STATUS</b>
 
 
-🟢 Status:
+🟢 <b>Status:</b>
 
 ACTIVE
 
 
-📦 Paket:
+📦 <b>Paket:</b>
 
 {member['package']}
 
 
-📅 Expired:
+📅 <b>Expired:</b>
 
 {member['expired']}
 
@@ -210,22 +250,45 @@ bagian dari:
 """
 
 
+
+        keyboard = member_menu()
+
+
+
     else:
 
 
         text = """
 
-🔒 <b>MEMBERSHIP EXPIRED</b>
+🔒 <b>MEMBERSHIP SUDAH BERAKHIR</b>
 
 
-Masa aktif Anda telah selesai.
+<blockquote>
+"Masa aktif membership Anda
+telah selesai."
+</blockquote>
 
 
-Silakan perpanjang membership
-untuk mendapatkan akses kembali.
+Silakan lakukan perpanjangan
+untuk mendapatkan kembali:
+
+
+📊 Signal XAUUSD Premium
+
+🧠 Smart Money Concept
+
+⚡ Market Update Gold
+
+
+🤖 @Intradayxauusd_bot
 
 
 """
+
+
+        keyboard = renew_button()
+
+
 
 
 
@@ -233,10 +296,11 @@ untuk mendapatkan akses kembali.
 
         text,
 
+        reply_markup=keyboard,
+
         parse_mode="HTML"
 
     )
-
 
 
     await callback.answer()
