@@ -86,7 +86,8 @@ AI Trading Assistant Anda.
 <blockquote>
 "Saya akan membantu memberikan
 Signal XAUUSD dengan metode
-Smart Money Concept."
+Smart Money Concept
+Setiap 1 jam sekali di Menit 00"
 </blockquote>
 
 
