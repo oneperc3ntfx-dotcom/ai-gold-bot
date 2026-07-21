@@ -2,9 +2,6 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 
-from dotenv import load_dotenv
-
-
 from config.settings import BOT_TOKEN
 
 
@@ -12,11 +9,6 @@ from handlers.start import router as start_router
 from handlers.menu import router as menu_router
 from handlers.signal import router as signal_router
 from handlers.admin import router as admin_router
-from handlers.reply import router as reply_router
-
-
-
-load_dotenv()
 
 
 
@@ -27,8 +19,6 @@ bot = Bot(
 
 
 dp = Dispatcher()
-
-
 
 
 
@@ -55,12 +45,6 @@ dp.include_router(
 dp.include_router(
     admin_router
 )
-
-
-dp.include_router(
-    reply_router
-)
-
 
 
 
