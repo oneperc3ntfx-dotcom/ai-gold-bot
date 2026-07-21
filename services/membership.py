@@ -32,10 +32,15 @@ def check_member(
 
 
         sheet_id = str(
+
             member.get(
+
                 "telegram_id",
+
                 ""
+
             )
+
         )
 
 
@@ -44,7 +49,9 @@ def check_member(
 
 
             user_rows.append(
+
                 member
+
             )
 
 
@@ -52,7 +59,7 @@ def check_member(
 
 
     # ==========================
-    # USER TIDAK ADA
+    # USER BELUM ADA DI SHEET
     # ==========================
 
 
@@ -61,13 +68,20 @@ def check_member(
 
         return {
 
+
+            "found": False,
+
+
             "active": False,
 
+
             "expired": None,
+
 
             "package": None
 
         }
+
 
 
 
@@ -86,8 +100,11 @@ def check_member(
             expired = datetime.strptime(
 
                 row.get(
+
                     "expired",
+
                     ""
+
                 ),
 
                 DATE_FORMAT
@@ -98,6 +115,7 @@ def check_member(
             valid_rows.append(
 
                 (
+
                     expired,
 
                     row
@@ -116,8 +134,9 @@ def check_member(
 
 
 
+
     # ==========================
-    # TANGGAL INVALID
+    # DATA EXPIRED TIDAK VALID
     # ==========================
 
 
@@ -127,9 +146,14 @@ def check_member(
         return {
 
 
+            "found": True,
+
+
             "active": False,
 
+
             "expired": None,
+
 
             "package": None
 
@@ -139,8 +163,10 @@ def check_member(
 
 
 
+
+
     # ==========================
-    # AMBIL EXPIRED TERPANJANG
+    # AMBIL EXPIRED TERLAMA
     # ==========================
 
 
@@ -178,17 +204,22 @@ def check_member(
 
 
 
+
     # ==========================
-    # ACTIVE CHECK
-    # ==========================
-    #
-    # expired hari ini = expired
+    # MEMBER ACTIVE
     #
     # contoh:
+    # expired 23-07-2026
+    # hari ini 22-07-2026
+    #
+    # ACTIVE
+    #
     # expired 22-07-2026
     # hari ini 22-07-2026
-    # maka false
     #
+    # EXPIRED
+    #
+    # ==========================
 
 
     if (
@@ -205,13 +236,18 @@ def check_member(
         return {
 
 
+            "found": True,
+
+
             "active": True,
 
 
             "expired":
 
                 latest.get(
+
                     "expired"
+
                 ),
 
 
@@ -219,7 +255,9 @@ def check_member(
             "package":
 
                 latest.get(
+
                     "paket"
+
                 ),
 
 
@@ -227,8 +265,11 @@ def check_member(
             "username":
 
                 latest.get(
+
                     "username",
+
                     ""
+
                 ),
 
 
@@ -244,13 +285,15 @@ def check_member(
 
 
 
-
     # ==========================
-    # EXPIRED
+    # MEMBER EXPIRED
     # ==========================
 
 
     return {
+
+
+        "found": True,
 
 
         "active": False,
@@ -259,7 +302,9 @@ def check_member(
         "expired":
 
             latest.get(
+
                 "expired"
+
             ),
 
 
@@ -267,7 +312,9 @@ def check_member(
         "package":
 
             latest.get(
+
                 "paket"
+
             ),
 
 
@@ -358,8 +405,9 @@ def get_active_members():
 
 
 
+
         # ==========================
-        # SIMPAN EXPIRED TERPANJANG
+        # AMBIL EXPIRED TERBARU
         # ==========================
 
 
@@ -373,6 +421,7 @@ def get_active_members():
                 member
 
             )
+
 
 
         else:
@@ -399,8 +448,6 @@ def get_active_members():
 
 
 
-
-
     result = []
 
 
@@ -411,8 +458,8 @@ def get_active_members():
 
 
 
-    for expired, member in checked.values():
 
+    for expired, member in checked.values():
 
 
         status = str(
@@ -430,8 +477,6 @@ def get_active_members():
 
 
 
-
-        # expired hari ini tidak masuk
 
 
         if (
