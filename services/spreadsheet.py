@@ -1,9 +1,14 @@
+import os
+import json
+
 import gspread
 
 from oauth2client.service_account import ServiceAccountCredentials
 
 
 from config.settings import SPREADSHEET_ID
+
+
 
 
 
@@ -22,9 +27,23 @@ scope = [
 
 
 
-creds = ServiceAccountCredentials.from_json_keyfile_name(
 
-    "credentials/google.json",
+
+google_credentials = json.loads(
+
+    os.getenv(
+        "GOOGLE_CREDENTIALS"
+    )
+
+)
+
+
+
+
+
+creds = ServiceAccountCredentials.from_json_keyfile_dict(
+
+    google_credentials,
 
     scope
 
@@ -32,56 +51,36 @@ creds = ServiceAccountCredentials.from_json_keyfile_name(
 
 
 
+
+
 client = gspread.authorize(
+
     creds
+
 )
 
 
 
+
+
 sheet = client.open_by_key(
+
     SPREADSHEET_ID
+
 ).sheet1
 
 
 
 
 
+
+
 # ==========================
-# GET ALL MEMBER
+# GET MEMBERS
 # ==========================
 
 
 def get_members():
 
+
     return sheet.get_all_records()
-
-
-
-
-# ==========================
-# ADD MEMBER
-# ==========================
-
-
-def add_member(data):
-
-
-    sheet.append_row([
-
-        data["telegram_id"],
-
-        data["username"],
-
-        data["nama"],
-
-        data["paket"],
-
-        data["harga"],
-
-        data["register"],
-
-        data["expired"],
-
-        data["status"]
-
-    ])
