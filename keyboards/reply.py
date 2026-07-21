@@ -1,26 +1,33 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram import Router, F
+from aiogram.types import Message
+
+from handlers.start import start
 
 
-def main_keyboard():
+router = Router()
 
-    keyboard = ReplyKeyboardMarkup(
 
-        keyboard=[
 
-            [
-                KeyboardButton(
-                    text="🚀 START"
-                ),
-                KeyboardButton(
-                    text="⚙️ MENU"
-                )
-            ]
+@router.message(
+    F.text=="🚀 START"
+)
+async def start_button(
+    message: Message
+):
 
-        ],
+    await start(message)
 
-        resize_keyboard=True
 
+
+
+
+@router.message(
+    F.text=="⚙️ MENU"
+)
+async def menu_button(
+    message: Message
+):
+
+    await message.answer(
+        "/menu"
     )
-
-
-    return keyboard
