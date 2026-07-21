@@ -1,9 +1,6 @@
 from datetime import datetime
 
-
 from services.spreadsheet import get_members
-
-
 
 
 
@@ -54,7 +51,9 @@ def check_member(
 
 
 
-    # user tidak ditemukan
+    # ==========================
+    # USER TIDAK ADA
+    # ==========================
 
 
     if not user_rows:
@@ -62,12 +61,9 @@ def check_member(
 
         return {
 
-
             "active": False,
 
-
             "expired": None,
-
 
             "package": None
 
@@ -120,7 +116,9 @@ def check_member(
 
 
 
-    # jika expired kosong semua
+    # ==========================
+    # TANGGAL INVALID
+    # ==========================
 
 
     if not valid_rows:
@@ -131,9 +129,7 @@ def check_member(
 
             "active": False,
 
-
             "expired": None,
-
 
             "package": None
 
@@ -143,7 +139,9 @@ def check_member(
 
 
 
-    # ambil membership dengan expired paling lama
+    # ==========================
+    # AMBIL EXPIRED TERPANJANG
+    # ==========================
 
 
     latest_date, latest = max(
@@ -158,7 +156,7 @@ def check_member(
 
 
 
-    now = datetime.now()
+    today = datetime.now().date()
 
 
 
@@ -167,8 +165,11 @@ def check_member(
     status = str(
 
         latest.get(
+
             "status",
+
             ""
+
         )
 
     ).upper()
@@ -177,7 +178,28 @@ def check_member(
 
 
 
-    if latest_date >= now and status == "ACTIVE":
+    # ==========================
+    # ACTIVE CHECK
+    # ==========================
+    #
+    # expired hari ini = expired
+    #
+    # contoh:
+    # expired 22-07-2026
+    # hari ini 22-07-2026
+    # maka false
+    #
+
+
+    if (
+
+        latest_date.date() > today
+
+        and
+
+        status == "ACTIVE"
+
+    ):
 
 
         return {
@@ -186,28 +208,46 @@ def check_member(
             "active": True,
 
 
-            "expired": latest.get(
-                "expired"
-            ),
+            "expired":
+
+                latest.get(
+                    "expired"
+                ),
 
 
-            "package": latest.get(
-                "paket"
-            ),
+
+            "package":
+
+                latest.get(
+                    "paket"
+                ),
 
 
-            "username": latest.get(
-                "username",
-                ""
-            ),
+
+            "username":
+
+                latest.get(
+                    "username",
+                    ""
+                ),
 
 
-            "data": latest
+
+            "data":
+
+                latest
 
         }
 
 
 
+
+
+
+
+    # ==========================
+    # EXPIRED
+    # ==========================
 
 
     return {
@@ -216,17 +256,25 @@ def check_member(
         "active": False,
 
 
-        "expired": latest.get(
-            "expired"
-        ),
+        "expired":
+
+            latest.get(
+                "expired"
+            ),
 
 
-        "package": latest.get(
-            "paket"
-        ),
+
+        "package":
+
+            latest.get(
+                "paket"
+            ),
 
 
-        "data": latest
+
+        "data":
+
+            latest
 
     }
 
@@ -263,8 +311,11 @@ def get_active_members():
         telegram_id = str(
 
             member.get(
+
                 "telegram_id",
+
                 ""
+
             )
 
         )
@@ -272,6 +323,7 @@ def get_active_members():
 
 
         if not telegram_id:
+
 
             continue
 
@@ -285,7 +337,11 @@ def get_active_members():
             expired = datetime.strptime(
 
                 member.get(
-                    "expired"
+
+                    "expired",
+
+                    ""
+
                 ),
 
                 DATE_FORMAT
@@ -302,8 +358,9 @@ def get_active_members():
 
 
 
-        # jika user belum ada
-        # simpan
+        # ==========================
+        # SIMPAN EXPIRED TERPANJANG
+        # ==========================
 
 
         if telegram_id not in checked:
@@ -318,16 +375,11 @@ def get_active_members():
             )
 
 
-
         else:
-
 
 
             old_expired = checked[telegram_id][0]
 
-
-
-            # ambil expired terbaru
 
 
             if expired > old_expired:
@@ -348,11 +400,14 @@ def get_active_members():
 
 
 
+
     result = []
 
 
 
-    now = datetime.now()
+    today = datetime.now().date()
+
+
 
 
 
@@ -363,15 +418,31 @@ def get_active_members():
         status = str(
 
             member.get(
+
                 "status",
+
                 ""
+
             )
 
         ).upper()
 
 
 
-        if expired >= now and status == "ACTIVE":
+
+
+        # expired hari ini tidak masuk
+
+
+        if (
+
+            expired.date() > today
+
+            and
+
+            status == "ACTIVE"
+
+        ):
 
 
             result.append(
