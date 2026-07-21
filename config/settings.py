@@ -29,14 +29,6 @@ SIGNAL_TOPIC_ID = int(
 
 
 
-PAYMENT_GROUP_ID = int(
-    os.getenv(
-        "PAYMENT_GROUP_ID"
-    )
-)
-
-
-
 SPREADSHEET_ID = os.getenv(
     "SPREADSHEET_ID"
 )
