@@ -11,6 +11,8 @@ from services.membership import check_member
 
 from keyboards.menu import member_menu
 
+from keyboards.reply import main_keyboard
+
 from keyboards.buttons import renew_button
 
 import os
@@ -271,7 +273,7 @@ Hubungi:
 
 """,
 
-            reply_markup=renew_button(),
+            reply_markup=main_keyboard(),
 
             parse_mode="HTML"
 
@@ -343,7 +345,7 @@ untuk melihat layanan Anda.
 
 """,
 
-        reply_markup=member_menu(),
+        reply_markup=main_keyboard(),
 
         parse_mode="HTML"
 
