@@ -6,7 +6,9 @@ from datetime import datetime
 
 
 
-FILE = "database/cache.json"
+
+
+CACHE_FILE = "database/cache.json"
 
 
 
@@ -15,22 +17,30 @@ FILE = "database/cache.json"
 def load_cache():
 
 
-    if not os.path.exists(FILE):
+    if not os.path.exists(
+        CACHE_FILE
+    ):
 
 
         return {
 
-            "date": "",
-
-            "signal": 0
+            "date":"",
+            
+            "signal":0
 
         }
 
 
 
-    with open(FILE,"r") as f:
 
-        return json.load(f)
+
+    with open(
+        CACHE_FILE,
+        "r"
+    ) as file:
+
+
+        return json.load(file)
 
 
 
@@ -41,13 +51,23 @@ def load_cache():
 def save_cache(data):
 
 
-    with open(FILE,"w") as f:
+    with open(
+
+        CACHE_FILE,
+
+        "w"
+
+    ) as file:
 
 
         json.dump(
+
             data,
-            f,
+
+            file,
+
             indent=4
+
         )
 
 
@@ -57,7 +77,7 @@ def save_cache(data):
 
 
 # ==========================
-# SIGNAL NUMBER
+# SIGNAL COUNTER
 # ==========================
 
 
@@ -67,9 +87,10 @@ def get_signal_number():
     data = load_cache()
 
 
-
     today = datetime.now().strftime(
+
         "%Y-%m-%d"
+
     )
 
 
@@ -79,15 +100,17 @@ def get_signal_number():
 
         data = {
 
+
             "date":today,
 
+
             "signal":1
+
 
         }
 
 
         save_cache(data)
-
 
 
         return 1
@@ -111,8 +134,11 @@ def increase_signal_number():
 
 
     today = datetime.now().strftime(
+
         "%Y-%m-%d"
+
     )
+
 
 
 
@@ -121,9 +147,12 @@ def increase_signal_number():
 
         data = {
 
+
             "date":today,
 
-            "signal":2
+
+            "signal":1
+
 
         }
 
