@@ -3,7 +3,8 @@ from aiogram.types import Message
 
 
 from config.settings import (
-    SOURCE_GROUP_ID
+    SOURCE_GROUP_ID,
+    SIGNAL_TOPIC_ID
 )
 
 
@@ -60,13 +61,7 @@ async def receive_signal(
 
 
     print(
-        "FROM ID:",
-        message.from_user.id if message.from_user else None
-    )
-
-
-    print(
-        "FROM NAME:",
+        "FROM:",
         message.from_user.full_name if message.from_user else None
     )
 
@@ -88,18 +83,18 @@ async def receive_signal(
 
     # ======================
     # CHECK TOPIC
-    # SEMENTARA DIMATIKAN
-    # UNTUK TEST
     # ======================
 
 
-    # if message.message_thread_id != SIGNAL_TOPIC_ID:
-    #
-    #     print(
-    #         "Bukan topic signal"
-    #     )
-    #
-    #     return
+    if message.message_thread_id != SIGNAL_TOPIC_ID:
+
+
+        print(
+            "Bukan topic signal"
+        )
+
+        return
+
 
 
 
@@ -118,6 +113,7 @@ async def receive_signal(
         )
 
         return
+
 
 
 
@@ -154,22 +150,16 @@ async def receive_signal(
     )
 
 
-
-    print(
-        "======================"
-    )
-
     print(
         "SIGNAL FORMAT:"
     )
+
 
     print(
         signal_text
     )
 
-    print(
-        "======================"
-    )
+
 
 
 
@@ -188,6 +178,7 @@ async def receive_signal(
         "TOTAL MEMBER:",
         len(members)
     )
+
 
 
 
@@ -230,17 +221,13 @@ async def receive_signal(
 
             await message.bot.send_message(
 
-
                 chat_id=int(
                     telegram_id
                 ),
 
-
                 text=signal_text,
 
-
                 parse_mode="HTML"
-
 
             )
 
@@ -253,6 +240,7 @@ async def receive_signal(
                 telegram_id
 
             )
+
 
 
 
