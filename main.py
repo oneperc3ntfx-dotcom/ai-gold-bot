@@ -7,11 +7,15 @@ from aiogram import Bot, Dispatcher
 from config.settings import BOT_TOKEN
 
 
-
 from handlers.start import router as start_router
 from handlers.menu import router as menu_router
 from handlers.signal import router as signal_router
 from handlers.admin import router as admin_router
+
+
+from services.scheduler import (
+    signal_scheduler
+)
 
 
 
@@ -62,6 +66,7 @@ dp.include_router(
 
 
 
+
 # ==========================
 # START BOT
 # ==========================
@@ -75,8 +80,40 @@ async def main():
     )
 
 
+
+    # ======================
+    # START SIGNAL ENGINE
+    # ======================
+
+
+    asyncio.create_task(
+
+        signal_scheduler(
+            bot
+        )
+
+    )
+
+
+
+    print(
+        "📊 MARKET ANALYSIS ENGINE ACTIVE"
+    )
+
+
+
+    print(
+        "⏰ AUTO SIGNAL EVERY HOUR ACTIVE"
+    )
+
+
+
+
+
     await dp.start_polling(
+
         bot
+
     )
 
 
