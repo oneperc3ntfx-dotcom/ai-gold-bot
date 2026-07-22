@@ -1,8 +1,16 @@
 import asyncio
 
+
 from aiogram import Bot, Dispatcher
 
+
+from fastapi import FastAPI
+import uvicorn
+
+
+
 from config.settings import BOT_TOKEN
+
 
 
 from handlers.start import router as start_router
@@ -10,6 +18,17 @@ from handlers.menu import router as menu_router
 from handlers.signal import router as signal_router
 from handlers.admin import router as admin_router
 
+
+
+from api.signal_api import router as signal_api_router
+
+
+
+
+
+# ==========================
+# BOT SETUP
+# ==========================
 
 
 bot = Bot(
@@ -22,8 +41,10 @@ dp = Dispatcher()
 
 
 
+
+
 # ==========================
-# REGISTER HANDLER
+# REGISTER TELEGRAM HANDLER
 # ==========================
 
 
@@ -50,12 +71,66 @@ dp.include_router(
 
 
 
+
 # ==========================
-# START BOT
+# FASTAPI SETUP
 # ==========================
 
 
-async def main():
+app = FastAPI(
+    title="XAU AI SIGNAL API"
+)
+
+
+
+app.include_router(
+    signal_api_router
+)
+
+
+
+
+
+
+# ==========================
+# RUN FASTAPI
+# ==========================
+
+
+async def run_api():
+
+
+    config = uvicorn.Config(
+
+        app,
+
+        host="0.0.0.0",
+
+        port=8000,
+
+        log_level="info"
+
+    )
+
+
+    server = uvicorn.Server(
+        config
+    )
+
+
+    await server.serve()
+
+
+
+
+
+
+# ==========================
+# RUN TELEGRAM BOT
+# ==========================
+
+
+async def run_bot():
 
 
     print(
@@ -71,6 +146,30 @@ async def main():
 
 
 
+
+# ==========================
+# MAIN
+# ==========================
+
+
+async def main():
+
+
+    await asyncio.gather(
+
+        run_bot(),
+
+        run_api()
+
+    )
+
+
+
+
+
+
+
 if __name__ == "__main__":
+
 
     asyncio.run(main())
