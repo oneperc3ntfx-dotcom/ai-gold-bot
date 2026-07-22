@@ -21,14 +21,6 @@ SOURCE_GROUP_ID = int(
 
 
 
-SIGNAL_TOPIC_ID = int(
-    os.getenv(
-        "SIGNAL_TOPIC_ID"
-    )
-)
-
-
-
 SPREADSHEET_ID = os.getenv(
     "SPREADSHEET_ID"
 )
