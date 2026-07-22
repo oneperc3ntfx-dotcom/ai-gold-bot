@@ -1,82 +1,247 @@
-from datetime import datetime, time
+import asyncio
+
+from datetime import datetime, timedelta
+
 import pytz
 
 
-TIMEZONE = pytz.timezone(
+from services.signal_builder import (
+    build_signal
+)
+
+
+from services.sender import (
+    send_signal_to_members
+)
+
+
+
+WIB = pytz.timezone(
     "Asia/Jakarta"
 )
 
 
-# ==========================
-# TRADING SESSION
-# ==========================
 
-START_DAY = 0       # Senin
-END_DAY = 5         # Sabtu
-
-
-START_TIME = time(
-    6, 55
-)                   # 06:55 WIB
-
-
-END_TIME = time(
-    2, 15
-)                   # 02:15 WIB
-
-
-
-
+# =====================================
+# CHECK TRADING SESSION
+# =====================================
 
 def trading_open():
 
-
     now = datetime.now(
-        TIMEZONE
+        WIB
     )
 
 
-    day = now.weekday()
+    hour = now.hour
 
-    current_time = now.time()
+    minute = now.minute
 
+
+
+    current_minutes = (
+
+        hour * 60
+
+        +
+
+        minute
+
+    )
+
+
+
+    # Mulai 06:55
+
+    start = (
+
+        6 * 60
+
+        +
+
+        55
+
+    )
+
+
+
+    # Berakhir 02:15 hari berikutnya
+
+    end = (
+
+        2 * 60
+
+        +
+
+        15
+
+    )
+
+
+
+    # sesi melewati tengah malam
+
+    if current_minutes >= start:
+
+        return True
+
+
+    if current_minutes <= end:
+
+        return True
+
+
+    return False
+
+
+
+
+
+# =====================================
+# NEXT SIGNAL TIME
+# =====================================
+
+def next_signal_time():
+
+    now = datetime.now(
+        WIB
+    )
+
+
+    target = now.replace(
+
+        minute=0,
+
+        second=0,
+
+        microsecond=0
+
+    )
+
+
+    if now.minute >= 0:
+
+        target += timedelta(
+
+            hours=1
+
+        )
+
+
+    return target
+
+
+
+
+
+# =====================================
+# SIGNAL LOOP
+# =====================================
+
+async def signal_scheduler(
+    bot
+):
 
 
     print(
-        "CHECK MARKET:",
-        now
+        "⏰ SIGNAL SCHEDULER ACTIVE"
     )
 
 
 
-    # ======================
-    # MINGGU OFF
-    # ======================
-
-    if day == 6:
-
-        return False
+    while True:
 
 
+        now = datetime.now(
+            WIB
+        )
 
-    # ======================
-    # SENIN SEBELUM 06:55
-    # ======================
 
-    if day == 0 and current_time < START_TIME:
-
-        return False
+        next_run = next_signal_time()
 
 
 
-    # ======================
-    # SABTU SETELAH 02:15
-    # ======================
+        wait = (
 
-    if day == 5 and current_time > END_TIME:
+            next_run - now
 
-        return False
+        ).total_seconds()
 
 
 
-    return True
+        print(
+
+            "NEXT SIGNAL:",
+
+            next_run.strftime(
+
+                "%d-%m-%Y %H:%M WIB"
+
+            )
+
+        )
+
+
+
+        await asyncio.sleep(
+            max(
+                wait,
+                1
+            )
+        )
+
+
+
+
+        if not trading_open():
+
+
+            print(
+
+                "MARKET SESSION CLOSED"
+
+            )
+
+
+            continue
+
+
+
+
+        print(
+
+            "GENERATING SIGNAL..."
+
+        )
+
+
+
+        signal = build_signal()
+
+
+
+        print(
+
+            signal
+
+        )
+
+
+
+        result = await send_signal_to_members(
+
+            bot,
+
+            signal
+
+        )
+
+
+
+        print(
+
+            "SEND RESULT:",
+
+            result
+
+        )
