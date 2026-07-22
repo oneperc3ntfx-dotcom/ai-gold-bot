@@ -13,20 +13,12 @@ from services.membership import (
 )
 
 
-from services.signal_parser import (
-    format_signal
-)
-
-
 from services.scheduler import (
     trading_open
 )
 
 
-
 router = Router()
-
-
 
 
 
@@ -55,20 +47,24 @@ async def receive_signal(
 
 
     print(
-        "TOPIC ID:",
+        "TOPIC:",
         message.message_thread_id
     )
 
 
     print(
         "FROM:",
-        message.from_user.full_name if message.from_user else None
+        message.from_user.full_name
+        if message.from_user
+        else None
     )
 
 
     print(
         "IS BOT:",
-        message.from_user.is_bot if message.from_user else None
+        message.from_user.is_bot
+        if message.from_user
+        else None
     )
 
 
@@ -76,8 +72,6 @@ async def receive_signal(
         "TEXT:",
         message.text
     )
-
-
 
 
 
@@ -90,7 +84,7 @@ async def receive_signal(
 
 
         print(
-            "Bukan topic signal"
+            "BUKAN TOPIC SIGNAL"
         )
 
         return
@@ -98,10 +92,8 @@ async def receive_signal(
 
 
 
-
-
     # ======================
-    # CHECK TRADING TIME
+    # MARKET TIME
     # ======================
 
 
@@ -117,10 +109,8 @@ async def receive_signal(
 
 
 
-
-
     # ======================
-    # CHECK MESSAGE
+    # CHECK TEXT
     # ======================
 
 
@@ -128,7 +118,7 @@ async def receive_signal(
 
 
         print(
-            "Pesan tidak memiliki text"
+            "TEXT KOSONG"
         )
 
         return
@@ -137,41 +127,24 @@ async def receive_signal(
 
 
 
-
     # ======================
-    # FORMAT SIGNAL
+    # AMBIL SIGNAL ASLI
     # ======================
 
 
-    signal_text = format_signal(
-
-        message.text
-
-    )
-
-
-    print(
-        "SIGNAL FORMAT:"
-    )
-
-
-    print(
-        signal_text
-    )
-
-
-
+    signal_text = message.text
 
 
 
 
 
     # ======================
-    # GET ACTIVE MEMBERS
+    # MEMBER ACTIVE
     # ======================
 
 
     members = get_active_members()
+
 
 
     print(
@@ -183,16 +156,12 @@ async def receive_signal(
 
 
 
-
-
-
     # ======================
-    # BROADCAST
+    # SEND USER
     # ======================
 
 
     for member in members:
-
 
 
         telegram_id = member.get(
@@ -200,19 +169,10 @@ async def receive_signal(
         )
 
 
-
         if not telegram_id:
 
 
-            print(
-                "Telegram ID kosong:",
-                member
-            )
-
             continue
-
-
-
 
 
 
@@ -225,38 +185,24 @@ async def receive_signal(
                     telegram_id
                 ),
 
-                text=signal_text,
-
-                parse_mode="HTML"
+                text=signal_text
 
             )
 
 
 
             print(
-
-                "TERKIRIM KE:",
-
+                "TERKIRIM:",
                 telegram_id
-
             )
-
-
-
-
 
 
 
         except Exception as e:
 
 
-
             print(
-
-                "GAGAL KIRIM:",
-
+                "GAGAL:",
                 telegram_id,
-
                 e
-
             )
