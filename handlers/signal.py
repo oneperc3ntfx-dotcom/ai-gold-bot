@@ -36,6 +36,7 @@ async def receive_signal(
     print("TEXT    :", message.text)
 
 
+
     # ======================
     # CHECK TOPIC
     # ======================
@@ -79,7 +80,10 @@ async def receive_signal(
     members = get_active_members()
 
 
-    print("TOTAL MEMBER:", len(members))
+    print(
+        "TOTAL MEMBER:",
+        len(members)
+    )
 
 
 
@@ -89,10 +93,25 @@ async def receive_signal(
 
     for member in members:
 
-        telegram_id = member["Telegram ID"]
+
+        telegram_id = member.get(
+            "telegram_id"
+        )
+
+
+        if not telegram_id:
+
+            print(
+                "Telegram ID kosong:",
+                member
+            )
+
+            continue
+
 
 
         try:
+
 
             await message.bot.send_message(
 
@@ -109,6 +128,7 @@ async def receive_signal(
                 "TERKIRIM KE:",
                 telegram_id
             )
+
 
 
         except Exception as e:
