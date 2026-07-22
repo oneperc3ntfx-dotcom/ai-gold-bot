@@ -1,9 +1,11 @@
 from aiogram import Router, F
 from aiogram.types import Message
+from aiogram.filters import Command
 
 
 from config.settings import (
-    SOURCE_GROUP_ID
+    SOURCE_GROUP_ID,
+    ADMIN_USERNAME
 )
 
 
@@ -17,14 +19,89 @@ from services.scheduler import (
 )
 
 
+from services.signal_builder import (
+    build_signal
+)
+
+
 
 router = Router()
 
 
 
-# ==========================
-# RECEIVE SIGNAL FROM GROUP
-# ==========================
+
+
+# =====================================
+# ADMIN MANUAL SIGNAL
+# =====================================
+
+
+@router.message(
+    Command("signal")
+)
+async def manual_signal(
+    message: Message
+):
+
+
+    username = (
+        message.from_user.username
+        if message.from_user
+        else None
+    )
+
+
+
+    if not username:
+
+
+        await message.answer(
+            "❌ Username Telegram tidak ditemukan"
+        )
+
+        return
+
+
+
+    if username != ADMIN_USERNAME.replace(
+        "@",
+        ""
+    ):
+
+
+        await message.answer(
+            "❌ Akses ditolak"
+        )
+
+        return
+
+
+
+    print(
+        "ADMIN REQUEST SIGNAL"
+    )
+
+
+
+    signal = build_signal()
+
+
+
+    await message.answer(
+
+        signal,
+
+        parse_mode="HTML"
+
+    )
+
+
+
+
+
+# =====================================
+# RECEIVE SIGNAL FROM OLD SOURCE GROUP
+# =====================================
 
 
 @router.message(
@@ -35,45 +112,22 @@ async def receive_signal(
 ):
 
 
-    print("\n======================")
-    print("=== SIGNAL MASUK ===")
-    print("======================")
-
+    print(
+        "\n======================"
+    )
 
     print(
-        "CHAT ID:",
-        message.chat.id
+        "=== SIGNAL GROUP MASUK ==="
+    )
+
+    print(
+        "======================"
     )
 
 
-    print(
-        "FROM:",
-        message.from_user.full_name
-        if message.from_user
-        else None
-    )
-
-
-    print(
-        "IS BOT:",
-        message.from_user.is_bot
-        if message.from_user
-        else None
-    )
-
-
-    print(
-        "TEXT:",
-        message.text
-    )
-
-
-
-    # ======================
-    # CHECK TIME
-    # ======================
 
     if not trading_open():
+
 
         print(
             "DILUAR JAM TRADING"
@@ -83,11 +137,9 @@ async def receive_signal(
 
 
 
-    # ======================
-    # CHECK TEXT
-    # ======================
 
     if not message.text:
+
 
         print(
             "TEXT KOSONG"
@@ -97,10 +149,6 @@ async def receive_signal(
 
 
 
-
-    # ======================
-    # SIGNAL ASLI
-    # ======================
 
     signal_text = message.text
 
@@ -117,12 +165,8 @@ async def receive_signal(
 
 
 
-
-    # ======================
-    # GET MEMBER ACTIVE
-    # ======================
-
     members = get_active_members()
+
 
 
     print(
@@ -133,10 +177,6 @@ async def receive_signal(
 
 
 
-
-    # ======================
-    # SEND USER
-    # ======================
 
     for member in members:
 
@@ -149,10 +189,6 @@ async def receive_signal(
 
         if not telegram_id:
 
-            print(
-                "Telegram ID kosong",
-                member
-            )
 
             continue
 
@@ -173,8 +209,9 @@ async def receive_signal(
             )
 
 
+
             print(
-                "TERKIRIM KE:",
+                "TERKIRIM:",
                 telegram_id
             )
 
@@ -184,7 +221,7 @@ async def receive_signal(
 
 
             print(
-                "GAGAL KIRIM:",
+                "GAGAL:",
                 telegram_id,
                 e
             )
