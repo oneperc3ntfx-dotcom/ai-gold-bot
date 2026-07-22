@@ -13,6 +13,12 @@ BOT_TOKEN = os.getenv(
 
 
 
+TWELVE_TOKEN = os.getenv(
+    "TWELVE_TOKEN"
+)
+
+
+
 SOURCE_GROUP_ID = int(
     os.getenv(
         "SOURCE_GROUP_ID"
