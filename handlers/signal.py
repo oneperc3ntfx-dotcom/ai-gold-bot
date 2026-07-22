@@ -3,8 +3,7 @@ from aiogram.types import Message
 
 
 from config.settings import (
-    SOURCE_GROUP_ID,
-    SIGNAL_TOPIC_ID
+    SOURCE_GROUP_ID
 )
 
 
@@ -43,10 +42,45 @@ async def receive_signal(
 ):
 
 
+    print("\n======================")
     print("=== SIGNAL MASUK ===")
-    print("CHAT ID :", message.chat.id)
-    print("TOPIC ID:", message.message_thread_id)
-    print("TEXT    :", message.text)
+    print("======================")
+
+
+    print(
+        "CHAT ID:",
+        message.chat.id
+    )
+
+
+    print(
+        "TOPIC ID:",
+        message.message_thread_id
+    )
+
+
+    print(
+        "FROM ID:",
+        message.from_user.id if message.from_user else None
+    )
+
+
+    print(
+        "FROM NAME:",
+        message.from_user.full_name if message.from_user else None
+    )
+
+
+    print(
+        "IS BOT:",
+        message.from_user.is_bot if message.from_user else None
+    )
+
+
+    print(
+        "TEXT:",
+        message.text
+    )
 
 
 
@@ -54,16 +88,18 @@ async def receive_signal(
 
     # ======================
     # CHECK TOPIC
+    # SEMENTARA DIMATIKAN
+    # UNTUK TEST
     # ======================
 
-    if message.message_thread_id != SIGNAL_TOPIC_ID:
 
-
-        print(
-            "Bukan topic signal"
-        )
-
-        return
+    # if message.message_thread_id != SIGNAL_TOPIC_ID:
+    #
+    #     print(
+    #         "Bukan topic signal"
+    #     )
+    #
+    #     return
 
 
 
@@ -72,6 +108,7 @@ async def receive_signal(
     # ======================
     # CHECK TRADING TIME
     # ======================
+
 
     if not trading_open():
 
@@ -86,10 +123,10 @@ async def receive_signal(
 
 
 
-
     # ======================
     # CHECK MESSAGE
     # ======================
+
 
     if not message.text:
 
@@ -104,9 +141,11 @@ async def receive_signal(
 
 
 
+
     # ======================
     # FORMAT SIGNAL
     # ======================
+
 
     signal_text = format_signal(
 
@@ -114,6 +153,11 @@ async def receive_signal(
 
     )
 
+
+
+    print(
+        "======================"
+    )
 
     print(
         "SIGNAL FORMAT:"
@@ -123,6 +167,9 @@ async def receive_signal(
         signal_text
     )
 
+    print(
+        "======================"
+    )
 
 
 
@@ -132,6 +179,7 @@ async def receive_signal(
     # ======================
     # GET ACTIVE MEMBERS
     # ======================
+
 
     members = get_active_members()
 
@@ -150,6 +198,7 @@ async def receive_signal(
     # ======================
     # BROADCAST
     # ======================
+
 
     for member in members:
 
@@ -179,7 +228,6 @@ async def receive_signal(
         try:
 
 
-
             await message.bot.send_message(
 
 
@@ -205,7 +253,6 @@ async def receive_signal(
                 telegram_id
 
             )
-
 
 
 
