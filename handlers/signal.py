@@ -3,8 +3,7 @@ from aiogram.types import Message
 
 
 from config.settings import (
-    SOURCE_GROUP_ID,
-    SIGNAL_TOPIC_ID
+    SOURCE_GROUP_ID
 )
 
 
@@ -16,6 +15,7 @@ from services.membership import (
 from services.scheduler import (
     trading_open
 )
+
 
 
 router = Router()
@@ -47,12 +47,6 @@ async def receive_signal(
 
 
     print(
-        "TOPIC:",
-        message.message_thread_id
-    )
-
-
-    print(
         "FROM:",
         message.from_user.full_name
         if message.from_user
@@ -76,29 +70,10 @@ async def receive_signal(
 
 
     # ======================
-    # CHECK TOPIC
+    # CHECK TIME
     # ======================
-
-
-    if message.message_thread_id != SIGNAL_TOPIC_ID:
-
-
-        print(
-            "BUKAN TOPIC SIGNAL"
-        )
-
-        return
-
-
-
-
-    # ======================
-    # MARKET TIME
-    # ======================
-
 
     if not trading_open():
-
 
         print(
             "DILUAR JAM TRADING"
@@ -108,14 +83,11 @@ async def receive_signal(
 
 
 
-
     # ======================
     # CHECK TEXT
     # ======================
 
-
     if not message.text:
-
 
         print(
             "TEXT KOSONG"
@@ -126,25 +98,31 @@ async def receive_signal(
 
 
 
-
     # ======================
-    # AMBIL SIGNAL ASLI
+    # SIGNAL ASLI
     # ======================
-
 
     signal_text = message.text
 
 
 
+    print(
+        "SIGNAL DITERUSKAN:"
+    )
+
+    print(
+        signal_text
+    )
+
+
+
 
 
     # ======================
-    # MEMBER ACTIVE
+    # GET MEMBER ACTIVE
     # ======================
-
 
     members = get_active_members()
-
 
 
     print(
@@ -160,7 +138,6 @@ async def receive_signal(
     # SEND USER
     # ======================
 
-
     for member in members:
 
 
@@ -169,10 +146,16 @@ async def receive_signal(
         )
 
 
+
         if not telegram_id:
 
+            print(
+                "Telegram ID kosong",
+                member
+            )
 
             continue
+
 
 
 
@@ -190,9 +173,8 @@ async def receive_signal(
             )
 
 
-
             print(
-                "TERKIRIM:",
+                "TERKIRIM KE:",
                 telegram_id
             )
 
@@ -202,7 +184,7 @@ async def receive_signal(
 
 
             print(
-                "GAGAL:",
+                "GAGAL KIRIM:",
                 telegram_id,
                 e
             )
