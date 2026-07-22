@@ -3,3 +3,5 @@ python-dotenv
 gspread
 oauth2client
 pytz
+fastapi
+uvicorn
