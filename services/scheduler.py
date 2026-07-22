@@ -1,17 +1,5 @@
 from datetime import datetime, time
-
-
 import pytz
-
-
-
-from config.constants import (
-    START_DAY,
-    END_DAY,
-    START_TIME,
-    END_TIME
-)
-
 
 
 TIMEZONE = pytz.timezone(
@@ -19,12 +7,25 @@ TIMEZONE = pytz.timezone(
 )
 
 
-
-
-
 # ==========================
-# CHECK TRADING SESSION
+# TRADING SESSION
 # ==========================
+
+START_DAY = 0       # Senin
+END_DAY = 5         # Sabtu
+
+
+START_TIME = time(
+    6, 55
+)                   # 06:55 WIB
+
+
+END_TIME = time(
+    2, 15
+)                   # 02:15 WIB
+
+
+
 
 
 def trading_open():
@@ -35,17 +36,22 @@ def trading_open():
     )
 
 
-
     day = now.weekday()
-
 
     current_time = now.time()
 
 
 
+    print(
+        "CHECK MARKET:",
+        now
+    )
 
 
-    # Minggu OFF
+
+    # ======================
+    # MINGGU OFF
+    # ======================
 
     if day == 6:
 
@@ -53,9 +59,9 @@ def trading_open():
 
 
 
-
-
-    # Senin sebelum jam 7
+    # ======================
+    # SENIN SEBELUM 06:55
+    # ======================
 
     if day == 0 and current_time < START_TIME:
 
@@ -63,15 +69,13 @@ def trading_open():
 
 
 
-
-
-    # Sabtu setelah jam 02
+    # ======================
+    # SABTU SETELAH 02:15
+    # ======================
 
     if day == 5 and current_time > END_TIME:
 
         return False
-
-
 
 
 
